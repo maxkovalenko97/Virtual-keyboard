@@ -1,29 +1,88 @@
 .keyboard {
     background: $background-keyboard;
-    width: 800px;
+    width: 720px;
     margin: 0 auto;
     padding: 5px;
+
+    border-radius: 5px;
+    transition: .3s;
 }
 
 .keyboard-row {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
 
     margin-bottom: 8px;
 }
 
 .keyboard-key {
     
-    width: 40px;
+    min-width: 40px;
     height: 40px;
 
+    margin-left: 6px;
+
+    font-size: 1rem;
+    font-weight: 500;
     text-align: center;
+    line-height: 40px;
 
     background: $background-keyboard-key;
     color: #ffffff;
+    border-radius: 3px;
+
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.keyboard-key:hover {
+    background: $background-keyboard-key-hover;
+    cursor: pointer;
+}
+
+.active {
+    background: rgb(160, 96, 96);
+    border-radius: 20px;
+    transition: .1s;
+}
+
+.remove {
+    transition: .1s;
 }
 
 .textarea {
-    width: 75vw;
-    height: 25vw;
+    width: 720px;
+    height: 150px;
+}
+
+.CapsLock, .Backspace, .ShiftLeft,  {
+    width: 100px;
+}
+
+.Tab {
+    width: 50px;
+}
+
+.Delete {
+    width: 44px;
+}
+
+.Enter , .ShiftRight {
+    width: 86px;
+}
+
+.Space {
+    width: 284px;
+}
+
+.ChangeLang {
+    background: #3ace9a;
+    // background-position: center;
+    // background-repeat: no-repeat;
+}
+
+.description {
+    margin: 20px auto;
+    width: 500px;
+    text-align: left;
 }
