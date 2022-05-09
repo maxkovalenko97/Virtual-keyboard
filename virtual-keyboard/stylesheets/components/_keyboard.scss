@@ -42,17 +42,23 @@
 
 .active {
     background: $background-keyboard-key-hover;
-    border-radius: 20px;
-    transition: .1s;
+    border-radius: 25px;
+    // font-size: 1.1em;
+    transition: .2s;
 }
 
 .remove {
-    transition: .1s;
+    transition: .2s;
 }
 
 .textarea {
     width: 720px;
     height: 150px;
+
+    color: #fff;
+    background: rgba(121, 62, 176, 0.562);
+    border-radius: 5px;
+    padding: 5px;
 }
 
 .CapsLock, .Backspace, .ShiftLeft,  {
@@ -93,6 +99,6 @@
 
 .description {
     margin: 20px auto;
-    width: 500px;
+    width: 620px;
     text-align: left;
 }

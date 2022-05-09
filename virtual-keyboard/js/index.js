@@ -10,7 +10,7 @@ class Keyboard {
             shift: false,
             language: 'en',
             flagForLang: false,
-            flagForShift: false,
+            flagForShift: true,
         }
     }
     
@@ -28,7 +28,7 @@ class Keyboard {
         this.inputKeyboard.classList.add('textarea');
         
         this.title.innerText = "Virtual Keyboard";
-        this.description.innerText = `  For changing language you can use special button on virtual keyboard or combination LeftCtrl + LeftAlt. \n Keyboard created for Windows OS.`
+        this.description.innerText = `Для смены языка можно использывать комбинацию клавиш LeftCtrl + LeftAlt на физической клавиатуре или специальную клавишу смены языка на виртуальной. \n Клавиатура сделана для Windows.`
 
         //for saving language before reload
         if(localStorage.getItem('keyboard-language') == null) {
@@ -132,7 +132,7 @@ class Keyboard {
 
                 case "ShiftLeft" :
                 case "ShiftRight" :
-                    key.addEventListener('click', () => { this._showShift(key) }); 
+                    key.addEventListener('click', () => { this._showShift(key, true) }); 
                 break;
 
                 case "ControlLeft" : case "ControlRight" : case "AltLeft" : case "AltRight" : case "MetaLeft" : 
@@ -158,7 +158,10 @@ class Keyboard {
             return;
         }
 
-        document.getElementById(e.code).classList.add('active');
+        if(e.code !== 'ShiftLeft' || e.code !== 'ShiftRight') {
+            document.getElementById(e.code).classList.add('active')
+        }
+        
 
         if(e.code == 'AltLeft' || e.code == 'ControlLeft') {
             if(this._checkActive('AltLeft') && this._checkActive('ControlLeft')) {
@@ -191,15 +194,12 @@ class Keyboard {
         }
 
         if(e.code == 'ShiftLeft' || e.code == 'ShiftRight') {
-            this.properties.flagForShift = true;
             if(this.properties.flagForShift) {
                 this.properties.flagForShift = false;
-                this._showShift();
+                this._showShift(e);
             }
             return;
         }
-
-        // document.getElementById(e.code).classList.add('active');
 
             this.inputKeyboard.value += document.getElementById(e.code).innerHTML;
     
@@ -216,7 +216,8 @@ class Keyboard {
         }
 
         if(e.code == 'ShiftLeft' || e.code == 'ShiftRight') {
-            this._showShift();
+            this.properties.flagForShift = true;
+            this._showShift(e);
             return;
         }
         
@@ -229,6 +230,12 @@ class Keyboard {
     
 
     _changeLanguage(){
+        console.log(this.properties.shift);
+            if(this.properties.shift) {
+                this._showShift();
+                document.getElementById('ShiftLeft').classList.remove('active');
+            }
+            
             this.properties.language = this.properties.language == 'en' ? 'ru' : 'en';
             localStorage.setItem('keyboard-language', this.properties.language);
     
@@ -276,22 +283,23 @@ class Keyboard {
             }
         }
     }
-    _showShift(key) {
-        key.classList.toggle('active');
+    _showShift(key, mouse) {
+        if(mouse) {
+            key.classList.toggle('active');
+        }  
+        
         this.properties.shift = !this.properties.shift;
 
         if(this.properties.language == 'en') {
             for(let key of this.allKeys) {
                 key.textContent = this.properties.shift ? key.dataset.shiften : key.dataset.en;
             }
-            this.properties.flagForShift = false;
             return;
         }
         if(this.properties.language == 'ru') {
             for(let key of this.allKeys) {
                 key.textContent = this.properties.shift ? key.dataset.shiftru : key.dataset.ru;
             }
-            this.properties.flagForShift = false;
             return;
         }
     }
