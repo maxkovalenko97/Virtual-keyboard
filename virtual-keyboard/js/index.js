@@ -76,6 +76,7 @@ class Keyboard {
                 key.setAttribute('data-shiftRu', el.rusShift);
                 key.setAttribute('data-shiftEn', el.shift);
                 key.id = el.name;
+                (el.SpecialKey)? key.classList.add('special-key') : null;
 
                 keyboardRow.append(key);
             });
@@ -87,20 +88,8 @@ class Keyboard {
 
     _addMouseEvents(keys) {
         keys.forEach(key => {
-            //add backlight 
-            if(key.id !== 'CapsLock' && key.id !== 'ShiftLeft' && key.id !== 'ShiftRight') {
-                key.addEventListener('mousedown', () => {
-                    key.classList.add('active');
-                    setTimeout(() => {
-                        key.classList.remove('active');
-                    }, 300);
-                });
-                key.addEventListener('mouseup', () => {
-                    key.classList.remove('active');
-                    
-                })
-            }
-    
+            this._addBacklight(key);
+        
             switch (key.id) {
                 case "Backspace" : 
                     key.addEventListener('click', () => { this._toBackspace() }); 
@@ -200,10 +189,7 @@ class Keyboard {
             }
             return;
         }
-
             this.inputKeyboard.value += document.getElementById(e.code).innerHTML;
-    
-        
     }
 
     _keyupKeyboard(e) {
@@ -226,8 +212,6 @@ class Keyboard {
     _keypressKeyboard(e) {
         e.preventDefault();
     }
-
-    
 
     _changeLanguage(){
         console.log(this.properties.shift);
@@ -254,14 +238,17 @@ class Keyboard {
         this.inputKeyboard.value += text;
         this.inputKeyboard.focus();
     }
+
     _toBackspace() {
         this.inputKeyboard.value = this.inputKeyboard.value.substring(0, this.inputKeyboard.value.length - 1);
         this.inputKeyboard.focus();
     }
+
     _toSpace() {
             this.inputKeyboard.value += " ";
             this.inputKeyboard.focus();
     }
+
     _toDelete() {
         if (this.inputKeyboard.selectionStart === this.inputKeyboard.selectionEnd) {
             this.inputKeyboard.setRangeText('', this.inputKeyboard.selectionStart, this.inputKeyboard.selectionEnd + 1, 'end');
@@ -270,6 +257,7 @@ class Keyboard {
           }
           this.inputKeyboard.focus();
     }
+
     _toggleCapsLock() {
         this.properties.capsLock = !this.properties.capsLock;
         
@@ -303,8 +291,24 @@ class Keyboard {
             return;
         }
     }
+
     _checkActive(str) {
         return (document.getElementById(str).classList.contains('active'));
+    }
+    
+    _addBacklight(key) {
+        if(key.id !== 'CapsLock' && key.id !== 'ShiftLeft' && key.id !== 'ShiftRight') {
+            key.addEventListener('mousedown', () => {
+                key.classList.add('active');
+                setTimeout(() => {
+                    key.classList.remove('active');
+                }, 300);
+            });
+            key.addEventListener('mouseup', () => {
+                key.classList.remove('active');
+                
+            })
+        }
     }
 
 }

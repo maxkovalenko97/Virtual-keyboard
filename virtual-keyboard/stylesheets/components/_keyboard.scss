@@ -35,6 +35,10 @@
     cursor: pointer;
 }
 
+.special-key{
+    background: $background-keyboard-special-key;
+}
+
 .keyboard-key:hover {
     background: $background-keyboard-key-hover;
     cursor: pointer;
@@ -81,17 +85,18 @@
     width: 284px;
 }
 
-.ChangeLang {
-    background-color: none;
-    background-image: url(../assets/icons/planet-earth-svgrepo-com.svg);
+#ChangeLang {
+    color: rgba(0, 0, 0, 0.507);
+    background-color: $background-keyboard-special-key;
+    background-image: url(../assets/icons/planet-earth-global-svgrepo-com.svg);
     background-size: 70%;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.ChangeLang:hover {
+#ChangeLang:hover {
     background-color: none;
-    background-image: url(../assets/icons/planet-earth-svgrepo-com.svg);
+    background-image: url(../assets/icons/planet-earth-global-svgrepo-com.svg);
     background-size: 80%;
     background-position: center;
     background-repeat: no-repeat;
@@ -102,3 +107,4 @@
     width: 620px;
     text-align: left;
 }
+
