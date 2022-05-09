@@ -76,9 +76,19 @@
 }
 
 .ChangeLang {
-    background: #3ace9a;
-    // background-position: center;
-    // background-repeat: no-repeat;
+    background-color: none;
+    background-image: url(../assets/icons/planet-earth-svgrepo-com.svg);
+    background-size: 70%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.ChangeLang:hover {
+    background-color: none;
+    background-image: url(../assets/icons/planet-earth-svgrepo-com.svg);
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .description {
