@@ -41,7 +41,7 @@
 }
 
 .active {
-    background: rgb(160, 96, 96);
+    background: $background-keyboard-key-hover;
     border-radius: 20px;
     transition: .1s;
 }

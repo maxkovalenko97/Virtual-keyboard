@@ -9,7 +9,6 @@ class Keyboard {
             capsLock: false,
             shift: false,
             language: 'en',
-            value: '',
             flagForLang: false,
             flagForShift: false,
         }
@@ -27,30 +26,30 @@ class Keyboard {
         this.title.classList.add('main-title');
         this.description.classList.add('description');
         this.inputKeyboard.classList.add('textarea');
+        
+        this.title.innerText = "Virtual Keyboard";
+        this.description.innerText = `  For changing language you can use special button on virtual keyboard or combination LeftCtrl + LeftAlt. \n Keyboard created for Windows OS.`
 
         //for saving language before reload
         if(localStorage.getItem('keyboard-language') == null) {
             localStorage.setItem('keyboard-language', 'en');
         }
         this.properties.language = localStorage.getItem('keyboard-language');
-
-        
-        
+ 
+        //create Keys to Container         
         this.keyboardContainer.append(this._createKeys());
-
-        this.allKeys = this.keyboardContainer.querySelectorAll('.keyboard-key');
-        this.title.innerText = "Virtual Keyboard";
-        this.description.innerText = `For changing language you can use special button on virtual keyboard or combination LeftCtrl + LeftAlt. \n 
-                                    Keyboard created for Windows OS.`
         
-
-
+        //save Obj of Keys 
+        this.allKeys = this.keyboardContainer.querySelectorAll('.keyboard-key');
+        this._addMouseEvents(this.allKeys);
+        
         this.wrapper.appendChild(this.title);
         this.wrapper.appendChild(this.inputKeyboard);
         this.wrapper.appendChild(this.keyboardContainer);
         this.wrapper.appendChild(this.description);
 
         document.body.appendChild(this.wrapper);
+
         document.addEventListener('keydown', (e) => this._keydownKeyboard(e));
         document.addEventListener('keyup', (e) => this._keyupKeyboard(e));
         document.addEventListener('keypress',(e) => this._keypressKeyboard(e));
@@ -58,10 +57,6 @@ class Keyboard {
         this.inputKeyboard.onkeydown = (e) => {
             e.preventDefault();
         } 
-
-        this.inputKeyboard.focus();
-        // this.inputKeyboard.addEventListener('keypress', () => {})
-
     }
 
     _createKeys() {
@@ -70,7 +65,6 @@ class Keyboard {
         for(let i=0; i<5; i++) {
             let keyboardRow = document.createElement('div');
             keyboardRow.classList.add('keyboard-row');
-            keyboardRow.id = `row-${i+1}`;
 
             objOfKeys[i].forEach(el => {
                 let key = document.createElement('div');
@@ -83,57 +77,6 @@ class Keyboard {
                 key.setAttribute('data-shiftEn', el.shift);
                 key.id = el.name;
 
-                if(el.name !== 'CapsLock') {
-                    key.addEventListener('mousedown', () => {
-                        key.classList.add('active');
-                    });
-                    key.addEventListener('mouseup', () => {
-                        key.classList.remove('active');
-                        
-                    })
-                }
-
-                switch (el.name) {
-                    case "Space" : 
-                    key.addEventListener('click', () => { this._toSpace();}); 
-                    break;
-
-                    case "Backspace" : 
-                        key.addEventListener('click', () => { this._toBackspace(); }); 
-                    break;
-
-                    case "Delete" :
-                        key.addEventListener('click', () => { this._toDelete(); }); 
-                    break;
-                    case "CapsLock" : 
-                        key.addEventListener('click', () => { this._toggleCapsLock();}); 
-                    break;
-
-                    case "ShiftLeft" :
-                    case "ShiftRight" :
-                        key.addEventListener('click', () => {
-                            this._showShift();
-                        }); 
-                        break;   
-
-                    case "Enter":
-                        key.addEventListener('click',() => {
-                            this._printToInput("\n");
-                        });
-                        break;
-
-                    case 'ChangeLang' : 
-                        key.addEventListener('click',()=> {
-                            this._changeLanguage();
-                        });
-                    break;
-                                            
-                    default :
-                        key.addEventListener('click', () => {
-                            this._printToInput(key.textContent);
-                        });
-                       
-                }
                 keyboardRow.append(key);
             });
         
@@ -142,34 +85,72 @@ class Keyboard {
         return keyboardRows;
     }
 
-
-
-    _showShift() {
-        this.properties.shift = !this.properties.shift;
-        if(this.properties.language == 'en') {
-            for(let key of this.allKeys) {
-                key.textContent = this.properties.shift ? key.dataset.shiften : key.dataset.en;
+    _addMouseEvents(keys) {
+        keys.forEach(key => {
+            //add backlight 
+            if(key.id !== 'CapsLock' && key.id !== 'ShiftLeft' && key.id !== 'ShiftRight') {
+                key.addEventListener('mousedown', () => {
+                    key.classList.add('active');
+                    setTimeout(() => {
+                        key.classList.remove('active');
+                    }, 300);
+                });
+                key.addEventListener('mouseup', () => {
+                    key.classList.remove('active');
+                    
+                })
             }
-            this.properties.flagForShift = false;
-            return;
-        }
-        if(this.properties.language == 'ru') {
-            for(let key of this.allKeys) {
-                key.textContent = this.properties.shift ? key.dataset.shiftru : key.dataset.ru;
+    
+            switch (key.id) {
+                case "Backspace" : 
+                    key.addEventListener('click', () => { this._toBackspace() }); 
+                break;
+
+                case "Tab" : 
+                    key.addEventListener('click', () => { this._printToInput('    ') }); 
+                break;
+
+                case "Delete" :
+                    key.addEventListener('click', () => { this._toDelete(); }); 
+                break;
+
+                case "Space" : 
+                    key.addEventListener('click', () => { this._toSpace()}); 
+                break;
+
+                case "CapsLock" : 
+                    key.addEventListener('click', () => { this._toggleCapsLock()}); 
+                break;
+                
+                case "Enter":
+                    key.addEventListener('click',() => { this._printToInput("\n")});
+                break;
+
+                case 'ChangeLang' : 
+                    key.addEventListener('click',()=> { this._changeLanguage() });
+                break;
+
+                case "ShiftLeft" :
+                case "ShiftRight" :
+                    key.addEventListener('click', () => { this._showShift(key) }); 
+                break;
+
+                case "ControlLeft" : case "ControlRight" : case "AltLeft" : case "AltRight" : case "MetaLeft" : 
+                this.inputKeyboard.focus()
+                break;
+
+                default :
+                    key.addEventListener('click', () => { this._printToInput(key.textContent) });
             }
-            this.properties.flagForShift = false;
-            return;
-        }
+        })
         
     }
 
-
-
-
-
-    
-
     _keydownKeyboard(e) {
+        if(!document.getElementById(e.code)){
+            return;
+        }
+
         this.inputKeyboard.focus();
 
         if(e.code == 'CapsLock') {
@@ -179,12 +160,10 @@ class Keyboard {
 
         document.getElementById(e.code).classList.add('active');
 
-    
-        if(e.code == 'AltLeft') this.properties.flagForLang = true;
-        if(e.code == 'ControlLeft' && this.properties.flagForLang) {
-            this._changeLanguage();
-            this.properties.flagForLang = false;
-            return;
+        if(e.code == 'AltLeft' || e.code == 'ControlLeft') {
+            if(this._checkActive('AltLeft') && this._checkActive('ControlLeft')) {
+                this._changeLanguage();
+            }
         }
 
         if(e.code == 'Backspace') {
@@ -228,6 +207,10 @@ class Keyboard {
     }
 
     _keyupKeyboard(e) {
+        if(!document.getElementById(e.code)){
+            return;
+        }
+
         if(e.code !== 'CapsLock') {
             document.getElementById(e.code).classList.remove('active');
         }
@@ -243,7 +226,7 @@ class Keyboard {
         e.preventDefault();
     }
 
-
+    
 
     _changeLanguage(){
             this.properties.language = this.properties.language == 'en' ? 'ru' : 'en';
@@ -293,6 +276,29 @@ class Keyboard {
             }
         }
     }
+    _showShift(key) {
+        key.classList.toggle('active');
+        this.properties.shift = !this.properties.shift;
+
+        if(this.properties.language == 'en') {
+            for(let key of this.allKeys) {
+                key.textContent = this.properties.shift ? key.dataset.shiften : key.dataset.en;
+            }
+            this.properties.flagForShift = false;
+            return;
+        }
+        if(this.properties.language == 'ru') {
+            for(let key of this.allKeys) {
+                key.textContent = this.properties.shift ? key.dataset.shiftru : key.dataset.ru;
+            }
+            this.properties.flagForShift = false;
+            return;
+        }
+    }
+    _checkActive(str) {
+        return (document.getElementById(str).classList.contains('active'));
+    }
+
 }
 
 
