@@ -28,7 +28,7 @@ class Keyboard {
     this.inputKeyboard.classList.add('textarea');
 
     this.title.innerText = 'Virtual Keyboard';
-    this.description.innerText = 'Для смены языка можно использывать комбинацию клавиш LeftCtrl + LeftAlt на физической клавиатуре или специальную клавишу смены языка на виртуальной. \n Клавиатура сделана для Windows.';
+    this.description.innerHTML = `Для смены языка можно использывать комбинацию клавиш LeftCtrl + LeftAlt на физической клавиатуре или специальную клавишу смены языка на виртуальной. \n Клавиатура сделана для Windows.Ссылка на пулл https://github.com/maxkovalenko97/virtual-keyboard/pulls`;
 
     // for saving language before reload
     if (localStorage.getItem('keyboard-language') == null) {
