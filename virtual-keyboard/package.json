@@ -4,8 +4,10 @@
   "description": "Private repository for @maxkovalenko97",
   "main": "index.js",
   "scripts": {
-    "style" : " sass --watch ./stylesheets/style.scss ./stylesheets/style.css",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "style": " sass --watch ./stylesheets/style.scss ./stylesheets/style.css",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./js",
+    "lint:fix": "eslint ./js --fix"
   },
   "repository": {
     "type": "git",
@@ -16,5 +18,14 @@
   "bugs": {
     "url": "https://github.com/rolling-scopes-school/maxkovalenko97-JSFE2022Q1/issues"
   },
-  "homepage": "https://github.com/rolling-scopes-school/maxkovalenko97-JSFE2022Q1#readme"
+  "homepage": "https://github.com/rolling-scopes-school/maxkovalenko97-JSFE2022Q1#readme",
+  "dependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.2"
+  }
 }
